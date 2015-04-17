@@ -136,7 +136,12 @@ function sassGenerateContents(destFilePath, creds){
 
 		var content = file.contents.toString('utf8'),
 			relPath = file.path.replace(file.cwd,'');
-		comments = content.split('\n')[0].replace('//', '* ');
+		comments = content.split('\n')[0]
+		if(comments.charAt(0) !== '/' && comments.charAt(1) !== '/'){
+			process.stdout.write(PLUGIN_NAME + ' Comments missing from file: ' + fileName + ' - File not included\n');
+			return cb();
+		}
+		comments.replace('//', '* ');
 		imports = '@import "' + relPath + '"';
 
 		updateFile(newFile, imports, comments);
