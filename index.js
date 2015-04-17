@@ -91,12 +91,17 @@ function sassGenerateContents(destFilePath, creds){
 		return;
 	}
 
+	function replacePath(path){
+		//hack for windows and mac filepath
+		return path.split('/').join(':').split('\\').join(':');
+	}
+
 	function getFileName(filePath){
-		return filePath.substring(filePath.length, filePath.lastIndexOf('/')+1);
+		return filePath.substring(filePath.length, replacePath(filePath).lastIndexOf(':')+1);
 	}
 
 	function createFile(destFilePath){
-		var base = destFilePath.substring(0,destFilePath.lastIndexOf('/')+1);
+		var base = destFilePath.substring(0, replacePath(destFilePath).lastIndexOf(':')+1);
 		var newFile = new gutil.File({
 			cwd: '',
 			base: '',
@@ -108,16 +113,17 @@ function sassGenerateContents(destFilePath, creds){
 	}
 
 	function getBase(filePath){
-		return filePath.substring(0, filePath.lastIndexOf('/'));
+		return filePath.substring(0, replacePath(filePath).lastIndexOf(':'));
 	}
 
 
 	/* main function */
 
 	function buildString(file, enc, cb){
-	
+		
 		var fileName = getFileName(file.path);
 		//don't read the destination path (if in same folder)
+		//console.log(fileName + '===' + destFileName)
 		if (fileName === destFileName) {
 			cb();
 			return;
