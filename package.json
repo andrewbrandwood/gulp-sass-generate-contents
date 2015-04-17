@@ -1,12 +1,12 @@
 {
-  "name": "gulp-sass-compile-imports",
+  "name": "gulp-sass-generate-contents",
   "version": "0.0.1",
   "author": {
     "name": "Andrew Brandwood",
     "email": "andrew.brandwood@codecomputerlove.com"
   },
   "description": "creates a file with all sass imports neccessary to build single website css file. It also creates a contents type directory based on the first comments line of each imported sass file",
-  "main": "tasks/sass_compile_imports.js",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/andrewbrandwood/sass-generate-contents.git"
