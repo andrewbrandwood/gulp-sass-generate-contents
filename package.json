@@ -9,17 +9,17 @@
   "main": "tasks/sass_compile_imports.js",
   "repository": {
     "type": "git",
-    "url": "https://andrewbrandwood@bitbucket.org/andrewbrandwood/gulp_sass_compile_imports.git"
+    "url": "https://github.com/andrewbrandwood/sass-generate-contents.git"
   },
   "bugs": {
-    "url": "https://andrewbrandwood@bitbucket.org/andrewbrandwood/gulp_sass_compile_imports.git/issues"
+    "url": "https://github.com/andrewbrandwood/sass-generate-contents.git/issues"
   },
   "keywords": [
     "gulp",
     "plugin"
   ],
   "files": [
-    "tasks/sass_compile_imports.js"
+    "sass-generate-contents.js"
   ],
   "author": "Andrew Brandwood",
   "license": "ISC",

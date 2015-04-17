@@ -5,11 +5,10 @@ var fs = require('fs'),
     gulp = require('gulp'),
     gutil = require('gulp-util'),
     plugins = require('gulp-load-plugins')(),
-    sgc = require('./tasks/sass-generate-contents');
+    sgc = require('./index');
 
 var config = {
 	root: '',
-	js_file: 'sass_compile_imports.js',
 	tests: 'tests'
 };
 
