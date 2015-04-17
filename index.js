@@ -5,7 +5,6 @@ var fs = require('fs');
 var gutil = require('gulp-util');
 var PluginError = gutil.PluginError;
 var File = gutil.File;
-var q = require('promised-io/promise');
 
 // Consts
 const PLUGIN_NAME = 'sass-generate-contents';
