@@ -19,7 +19,7 @@
     "plugin"
   ],
   "files": [
-    "sass-generate-contents.js"
+    "index.js"
   ],
   "license": "ISC",
   "devDependencies": {
