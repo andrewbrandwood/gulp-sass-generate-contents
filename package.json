@@ -1,0 +1,36 @@
+{
+  "name": "gulp-sass-compile-imports",
+  "version": "0.0.1",
+  "author": {
+    "name": "Andrew Brandwood",
+    "email": "andrew.brandwood@codecomputerlove.com"
+  },
+  "description": "creates a file with all sass imports neccessary to build single website css file. It also creates a contents type directory based on the first comments line of each imported sass file",
+  "main": "tasks/sass_compile_imports.js",
+  "repository": {
+    "type": "git",
+    "url": "https://andrewbrandwood@bitbucket.org/andrewbrandwood/gulp_sass_compile_imports.git"
+  },
+  "bugs": {
+    "url": "https://andrewbrandwood@bitbucket.org/andrewbrandwood/gulp_sass_compile_imports.git/issues"
+  },
+  "keywords": [
+    "gulp",
+    "plugin"
+  ],
+  "files": [
+    "tasks/sass_compile_imports.js"
+  ],
+  "author": "Andrew Brandwood",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.8.11",
+    "gulp-jshint": "^1.10.0",
+    "gulp-load-plugins": "^0.10.0",
+    "jest-cli": "^0.4.0"
+  },
+  "dependencies": {
+    "gulp-util": "^3.0.4",
+    "through2": "^0.6.5"
+  }
+}
