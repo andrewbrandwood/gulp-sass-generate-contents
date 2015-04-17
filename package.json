@@ -21,7 +21,6 @@
   "files": [
     "sass-generate-contents.js"
   ],
-  "author": "Andrew Brandwood",
   "license": "ISC",
   "devDependencies": {
     "gulp": "^3.8.11",
