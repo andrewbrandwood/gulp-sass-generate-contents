@@ -10,9 +10,13 @@
 
 /**
 * CONTENTS
-*
+* 
+* TESTS
 * this is comments on line one of tests
 * testing
+* 
+* PARTIALS
+* this is comments on line one of partials
 *
 */
 
@@ -21,3 +25,4 @@
 
 @import "/tests/_test.scss"
 @import "/tests/secondfile.scss"
+@import "/partials/_test-partial.scss"

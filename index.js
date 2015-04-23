@@ -14,7 +14,9 @@ function sassGenerateContents(destFilePath, creds){
 	var comments = '';
 	var imports = '';
 	var destFileName = getFileName(destFilePath);
-	var newFile = createFile(destFilePath);	
+	var newFile = createFile(destFilePath);
+	var currentFilePath = '';
+	var currentSection = '';
 	var importArr = [];
 	var commentsArr = [];
 	var creds = typeof creds === 'object' ? creds : {};
@@ -66,23 +68,35 @@ function sassGenerateContents(destFilePath, creds){
 		return credStr;
 	}
 
+
+
 	function updateFile(newFile, imports, comments){
 		// get the contents of the imports array
 		if(importArr.indexOf(imports) < 0){
 			//if the import doesn't exist add a new one
 			importArr.push(imports);
+
 		}
+
+		var section = getSection(currentFilePath);
+		if(section !== currentSection){
+			currentSection = section;
+			commentsArr.push('* \n* '+ currentSection.toUpperCase());
+		}
+
 		//get the contents of the comments array
 		if(commentsArr.indexOf(comments) < 0){
 			//if the comments don't exist add new ones
 			commentsArr.push(comments);
 		}
+
+
 		
 		// build site credentials iff passed in
 		var credsArr = createCreds(creds);
 
 		//Hack - quick array splitter
-		var startArr = ['/**\n* CONTENTS\n*'];
+		var startArr = ['/**\n* CONTENTS'];
 		var splitterArr = ['*\n*/\n\n\n\n'];
 		var newContents = credsArr.concat(startArr, commentsArr, splitterArr, importArr).join('\n');
 
@@ -94,6 +108,11 @@ function sassGenerateContents(destFilePath, creds){
 	function replacePath(path){
 		//hack for windows and mac filepath
 		return path.split('/').join(':').split('\\').join(':');
+	}
+
+	function getSection(path){
+
+		return replacePath(path).split(':').reverse()[1];
 	}
 
 	function getFileName(filePath){
@@ -120,8 +139,8 @@ function sassGenerateContents(destFilePath, creds){
 	/* main function */
 
 	function buildString(file, enc, cb){
-		
-		var fileName = getFileName(file.path);
+		currentFilePath = file.path;
+		var fileName = getFileName(currentFilePath);
 		//don't read the destination path (if in same folder)
 		//console.log(fileName + '===' + destFileName)
 		if (fileName === destFileName) {
@@ -141,7 +160,8 @@ function sassGenerateContents(destFilePath, creds){
 
 		var content = file.contents.toString('utf8'),
 			relPath = file.path.replace(file.cwd,'');
-		comments = content.split('\n')[0]
+
+		comments = content.split('\n')[0];
 		var firstChars = comments.charAt(0) + comments.charAt(1);
 		if(String(firstChars) !== '//'){
 			process.stdout.write(PLUGIN_NAME + ' Comments missing or malformed in file: ' + fileName + ' - File not included\n');
@@ -152,6 +172,7 @@ function sassGenerateContents(destFilePath, creds){
 		imports = '@import "' + relPath + '"';
 
 		updateFile(newFile, imports, comments);
+
 		//set the destination based on the file path
 		//this.pipe(gulp.dest('.' + getBase(destFilePath) + '/'));
 		this.push(newFile);

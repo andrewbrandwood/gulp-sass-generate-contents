@@ -9,7 +9,8 @@ var fs = require('fs'),
 
 var config = {
 	root: '',
-	tests: 'tests'
+	tests: 'tests',
+	partials: 'partials'
 };
 
 /* creds are used for the table of contents in the main scss file generated */
@@ -29,7 +30,7 @@ gulp.task('scripts:lint', function () {
 });
 
 gulp.task('sass-generate-contents', function(){
-	gulp.src(config.tests + '/**/*.scss')
+	gulp.src([config.tests + '/**/*.scss', config.partials + '/**/*.scss'])
 	.pipe(sgc('_main.scss', creds))
 	.pipe(gulp.dest(config.tests));
 });
