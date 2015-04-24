@@ -157,7 +157,6 @@ function sassGenerateContents(destFilePath, creds){
 		currentFilePath = file.path;
 		var fileName = getFileName(currentFilePath);
 		//don't read the destination path (if in same folder)
-		//console.log(fileName + '===' + destFileName)
 		if (fileName === destFileName) {
 			cb();
 			return;
@@ -175,7 +174,6 @@ function sassGenerateContents(destFilePath, creds){
 
 		var content = file.contents.toString('utf8'),
 			relPath = file.path.replace(file.cwd,'');
-		//relPath = relPath.substring(1,relPath.length);
 
 		comments = content.split('\n')[0];
 		var firstChars = comments.charAt(0) + comments.charAt(1);
