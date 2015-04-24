@@ -120,11 +120,10 @@ function sassGenerateContents(destFilePath, creds){
 	}
 
 	function createFile(destFilePath){
-		var base = destFilePath.substring(0, replacePath(destFilePath).lastIndexOf(':')+1);
 		var newFile = new gutil.File({
 			cwd: '',
 			base: '',
-			path: destFilePath,
+			path: destFileName,
 			contents: new Buffer('')
 		});
 
@@ -133,6 +132,22 @@ function sassGenerateContents(destFilePath, creds){
 
 	function getBase(filePath){
 		return filePath.substring(0, replacePath(filePath).lastIndexOf(':'));
+	}
+
+	function relPath(str){
+		if(replacePath(str.charAt(0)) !== ':'){
+			return '/' + str;
+		}
+		return str;
+	}
+
+	function getRelPath(p, dest){
+		
+		var p = relPath(p),
+			d = getBase(relPath(dest));
+		p = path.relative(d, p);
+
+		return p;
 	}
 
 
@@ -160,6 +175,7 @@ function sassGenerateContents(destFilePath, creds){
 
 		var content = file.contents.toString('utf8'),
 			relPath = file.path.replace(file.cwd,'');
+		//relPath = relPath.substring(1,relPath.length);
 
 		comments = content.split('\n')[0];
 		var firstChars = comments.charAt(0) + comments.charAt(1);
@@ -169,12 +185,12 @@ function sassGenerateContents(destFilePath, creds){
 		}
 		comments = comments.replace('//', '* ');
 
-		imports = '@import "' + relPath + '"';
+		relPath = getRelPath(relPath, destFilePath);
+
+		imports = '@import "' + relPath + '";';
 
 		updateFile(newFile, imports, comments);
 
-		//set the destination based on the file path
-		//this.pipe(gulp.dest('.' + getBase(destFilePath) + '/'));
 		this.push(newFile);
 		return cb();
 	};

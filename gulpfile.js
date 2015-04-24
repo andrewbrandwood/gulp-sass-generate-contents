@@ -10,6 +10,8 @@ var fs = require('fs'),
 var config = {
 	root: '',
 	tests: 'tests',
+	sass: '_source/sass',
+	css: '_client/css',
 	partials: 'partials'
 };
 
@@ -30,9 +32,9 @@ gulp.task('scripts:lint', function () {
 });
 
 gulp.task('sass-generate-contents', function(){
-	gulp.src([config.tests + '/**/*.scss', config.partials + '/**/*.scss'])
-	.pipe(sgc('_main.scss', creds))
-	.pipe(gulp.dest(config.tests));
+	gulp.src([config.sass + '/**/*.scss', config.partials + '/**/*.scss'])
+	.pipe(sgc(config.sass + '/_main.scss', creds))
+	.pipe(gulp.dest(config.sass));
 });
 
 

@@ -11,9 +11,9 @@
 /**
 * CONTENTS
 * 
-* TESTS
-* this is comments on line one of tests
-* testing
+* COMPONENTS
+* this is comments on line one of test
+* this is comments on line one of test2
 * 
 * PARTIALS
 * this is comments on line one of partials
@@ -23,6 +23,6 @@
 
 
 
-@import "/tests/_test.scss"
-@import "/tests/secondfile.scss"
-@import "/partials/_test-partial.scss"
+@import "components/_test.scss";
+@import "components/_test2.scss";
+@import "../../partials/_test-partial.scss";
