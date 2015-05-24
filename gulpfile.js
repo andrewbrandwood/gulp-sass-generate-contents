@@ -5,22 +5,9 @@ var fs = require('fs'),
     gulp = require('gulp'),
     gutil = require('gulp-util'),
     plugins = require('gulp-load-plugins')(),
+    config = require('./_config/project.json'),
+    creds = require('./_config/creds'),
     sgc = require('./index');
-
-var config = {
-	root: '',
-	tests: 'tests',
-	sass: '_source/sass',
-	css: '_client/css',
-	partials: 'partials'
-};
-
-/* creds are used for the table of contents in the main scss file generated */
-var creds = {
-	Site: 'Code Computerlove',
-	Author: 'Andrew Brandwood'
-}
-
 
 /* ============================================================ *\
     SCRIPTS / JS
@@ -32,9 +19,9 @@ gulp.task('scripts:lint', function () {
 });
 
 gulp.task('sass-generate-contents', function(){
-	gulp.src([config.sass + '/**/*.scss', config.partials + '/**/*.scss'])
-	.pipe(sgc(config.sass + '/_main.scss', creds))
-	.pipe(gulp.dest(config.sass));
+	gulp.src([config.src + '/' + config.dirs.styles + '/**/*.scss', config.dirs.partials + '/**/*.scss'])
+	.pipe(sgc(config.src + '/' + config.dirs.styles + '/_main.scss', creds))
+	.pipe(gulp.dest(config.src + '/' + config.dirs.styles));
 });
 
 
