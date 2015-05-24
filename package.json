@@ -28,7 +28,8 @@
     "gulp-jshint": "^1.10.0",
     "gulp-load-plugins": "^0.10.0",
     "mocha": "^2.2.5",
-    "should": "^6.0.3"
+    "should": "^6.0.3",
+    "stream-assert": "^2.0.2"
   },
   "dependencies": {
     "gulp-util": "^3.0.4",
