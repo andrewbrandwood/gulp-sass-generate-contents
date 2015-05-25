@@ -10,13 +10,8 @@ var fs = require('fs'),
     sgc = require('./index');
 
 /* ============================================================ *\
-    SCRIPTS / JS
+    MAIN TASKS
 \* ============================================================ */
-
-gulp.task('scripts:lint', function () {
-	gulp.src([config.js_file, config.tests + '/**/*.js'])
-			.pipe(plugins.jshint());
-});
 
 gulp.task('sass-generate-contents', function(){
 	gulp.src([config.src + '/' + config.dirs.styles + '/**/*.scss', config.dirs.partials + '/**/*.scss'])
@@ -24,13 +19,5 @@ gulp.task('sass-generate-contents', function(){
 	.pipe(gulp.dest(config.src + '/' + config.dirs.styles));
 });
 
-
-/* ============================================================ *\
-    MAIN TASKS
-\* ============================================================ */
-
-gulp.task('watch', function () {
-	gulp.watch([config.js_file, config.tests + '/**/*.js']);
-});
 
 gulp.task('default', ['sass-generate-contents']);

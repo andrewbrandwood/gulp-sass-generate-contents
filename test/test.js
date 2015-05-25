@@ -18,7 +18,7 @@ var assert = require('stream-assert'),
 describe('sass-generate-contents', function() {
     
     it('should emit error on streamed file', function (done) {
-        gulp.src([config.src + '/' + config.dirs.styles + '/**/*.scss', config.dirs.partials + '/**/*.scss'], { buffer: false })
+        gulp.src([config.src + '/' + config.dirs.styles + '/**/*.scss', config.dirs.components + '/**/*.scss'], { buffer: false })
         .pipe(sgc(config.src + '/' + config.dirs.styles + '/_main.scss', creds))
         .on('error', function (err) {
           err.message.should.eql('Streaming not supported');
@@ -34,10 +34,26 @@ describe('sass-generate-contents', function() {
         .write(new File());
     });
 
+    it('should ignore files without correct formatted comments', function (done) {
+        gulp.src([config.dirs.components + '/_test-partial.scss'])
+        .pipe(sgc(config.src + '/' + config.dirs.styles + '/_main.scss', creds))
+        .pipe(assert.length(0))
+        .pipe(assert.end(done));
+    });
+
     it('should not fail if creds are missing', function (done) {
-        gulp.src([config.src + '/' + config.dirs.styles + '/**/*.scss', config.dirs.partials + '/**/*.scss'])
+        gulp.src([config.src + '/' + config.dirs.styles + '/**/*.scss', config.dirs.components + '/**/*.scss'])
         .pipe(sgc(config.src + '/' + config.dirs.styles + '/_main.scss'))
         .pipe(assert.end(done));
     });
+
+    // it('should fail if file is the same as the destination file', function (done) {
+    //     gulp.src([config.src + '/' + config.dirs.styles + '/_main.scss'])
+    //     .pipe(sgc(config.src + '/' + config.dirs.styles + '/_main.scss'))
+    //     .pipe(assert.first(function(d){
+    //         console.log(d);
+    //     }))
+    //     .pipe(assert.end(done));
+    // });
 
 });

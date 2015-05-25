@@ -2,7 +2,7 @@
 
   #MAIN
 
-  Site:   Code Computerlove
+  Site:   Gulp Sass Generate Contents
   Author: Andrew Brandwood
 
 /* ============================================================ *\
@@ -12,17 +12,11 @@
 * CONTENTS
 * 
 * COMPONENTS
-* this is comments on line one of test
 * this is comments on line one of test2
-* 
-* PARTIALS
-* this is comments on line one of partials
 *
 */
 
 
 
 
-@import "components/_test.scss";
 @import "components/_test2.scss";
-@import "../../partials/_test-partial.scss";
