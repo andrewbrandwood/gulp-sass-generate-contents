@@ -151,7 +151,7 @@ function sassGenerateContents(destFilePath, creds){
 	}
 
 	function throwWarning(fileName){
-		return gutil.log(PLUGIN_NAME + ' Comments missing or malformed in file: ' + fileName + ' - File not included\n');
+		gutil.log(PLUGIN_NAME + ' Comments missing or malformed in file: ' + fileName + ' - File not included\n');
 	}
 
 
@@ -182,8 +182,8 @@ function sassGenerateContents(destFilePath, creds){
 		comments = content.split('\n')[0];
 		var firstChars = comments.charAt(0) + comments.charAt(1);
 		if(String(firstChars) !== '//'){
-			
-			return cb(throwWarning);
+			throwWarning(fileName);
+			return cb();
 		}
 		comments = comments.replace('//', '* ');
 
