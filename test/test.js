@@ -21,7 +21,7 @@ describe('sass-generate-contents', function() {
         gulp.src([config.src + '/' + config.dirs.styles + '/**/*.scss', config.dirs.partials + '/**/*.scss'], { buffer: false })
         .pipe(sgc(config.src + '/' + config.dirs.styles + '/_main.scss', creds))
         .on('error', function (err) {
-          err.message.should.equal('Streaming not supported');
+          err.message.should.eql('Streaming not supported');
           done();
         });
     });
@@ -32,6 +32,12 @@ describe('sass-generate-contents', function() {
         .pipe(assert.length(0))
         .pipe(assert.end(done))
         .write(new File());
+    });
+
+    it('should not fail if creds are missing', function (done) {
+        gulp.src([config.src + '/' + config.dirs.styles + '/**/*.scss', config.dirs.partials + '/**/*.scss'])
+        .pipe(sgc(config.src + '/' + config.dirs.styles + '/_main.scss'))
+        .pipe(assert.end(done));
     });
 
 });
