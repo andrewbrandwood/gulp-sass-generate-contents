@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "author": {
     "name": "Andrew Brandwood",
-    "email": "andrew.brandwood@codecomputerlove.com"
+    "email": "andrew@brandwood.com"
   },
   "description": "creates a file with all sass imports neccessary to build single website css file. It also creates a contents type directory based on the first comments line of each imported sass file",
   "main": "index.js",
