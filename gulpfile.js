@@ -3,7 +3,6 @@
 
 var fs = require('fs'),
     gulp = require('gulp'),
-    gutil = require('gulp-util'),
     plugins = require('gulp-load-plugins')(),
     config = require('./_config/project.json'),
     creds = require('./_config/creds'),
