@@ -21,6 +21,9 @@
   "files": [
     "index.js"
   ],
+  "scripts":{
+    "test": "node ./test/test.js"
+  },
   "license": "ISC",
   "devDependencies": {
     "event-stream": "~3.3.0",
