@@ -22,7 +22,7 @@
     "index.js"
   ],
   "scripts":{
-    "test": "test/test.js"
+    "test": "mocha test/test.js"
   },
   "license": "ISC",
   "devDependencies": {
