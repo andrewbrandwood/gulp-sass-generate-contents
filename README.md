@@ -12,6 +12,11 @@ The contents are generated from the first line of each individual SASS file.
 
 The plugin will ignore any files that do not have this on the first line of the file to be imported.
 
+### Install 
+```
+npm install gulp-sass-generate-contents
+
+```
 
 ### Example of SASS file to be imported
 
