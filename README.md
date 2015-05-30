@@ -1,17 +1,14 @@
-<a href="https://travis-ci.org/andrewbrandwood/sass-generate-contents"><img align="right" src="https://travis-ci.org/andrewbrandwood/sass-generate-contents.svg?branch=master" alt="Build status" /></a>
 
 # sass-generate-contents
-Gulp plugin to generate an imports file with a  table of contents
+Gulp plugin to generate an imports file with a  table of contents <a href="https://travis-ci.org/andrewbrandwood/sass-generate-contents"><img align="right" src="https://travis-ci.org/andrewbrandwood/sass-generate-contents.svg?branch=master" alt="Build status" /></a>
 
-This plugin was written to help with large scale website builds that use a CSS preprocessor.
+This plugin was written to help with large scale website builds that use a CSS preprocessor and Gulp as a task runner.
 
-It's purpose is to create a master SASS file to hold the css @imports of all the specified SASS files.
-
-It also generates a list of contents decribing each SASS file.
+It's purpose is to create a master SASS file to hold the css @imports of all the specified SASS files.  It also generates a list of contents of all SASS files with a description (<sup>*</sup>manual).
 
 The contents are generated from the first line of each individual SASS file.
 
-The plugin requires a comment at the top of each SASS file formatted starting with // (double slash).
+<sup>*</sup> The plugin requires a comment at the top of each SASS file formatted starting with // (double slash).
 
 The plugin will ignore any files that do not have this on the first line of the file to be imported.
 
