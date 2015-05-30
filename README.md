@@ -1,5 +1,5 @@
 
-# sass-generate-contents <a href="https://travis-ci.org/andrewbrandwood/sass-generate-contents"><img align="right" src="https://travis-ci.org/andrewbrandwood/sass-generate-contents.svg?branch=master" alt="Build status" /></a>
+# gulp-sass-generate-contents <a href="https://travis-ci.org/andrewbrandwood/gulp-sass-generate-contents"><img align="right" src="https://travis-ci.org/andrewbrandwood/gulp-sass-generate-contents.svg?branch=master" alt="Build status" /></a>
 Gulp plugin to generate an imports file with a  table of contents 
 
 This plugin was written to help with large scale website builds that use a CSS preprocessor and Gulp as a task runner.
@@ -29,7 +29,7 @@ The plugin will ignore any files that do not have this on the first line of the 
 ```javascript
 
 // Settings 
-var sgc = require('sass-generate-contents');
+var gsgc = require('gulp-sass-generate-contents');
 var creds = {
 	"Author": 	"Andrew Brandwood",
 	"Website": 	"www.Brandwood.com"
@@ -38,9 +38,9 @@ var creds = {
 
 // Gulp task
 
-gulp.task('sass-generate-contents', function () {
+gulp.task('gulp-sass-generate-contents', function () {
 	gulp.src(['sass/**/*.scss','partials/**/*.scss'])
-	.pipe(sgc('css/main.scss', creds))
+	.pipe(gsgc('css/main.scss', creds))
 	.pipe(gulp.dest('css'));
 });
 

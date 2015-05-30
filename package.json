@@ -1,5 +1,5 @@
 {
-  "name": "sass-generate-contents",
+  "name": "gulp-sass-generate-contents",
   "version": "0.0.1",
   "author": {
     "name": "Andrew Brandwood",
@@ -9,10 +9,10 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/andrewbrandwood/sass-generate-contents.git"
+    "url": "https://github.com/andrewbrandwood/gulp-sass-generate-contents.git"
   },
   "bugs": {
-    "url": "https://github.com/andrewbrandwood/sass-generate-contents.git/issues"
+    "url": "https://github.com/andrewbrandwood/gulp-sass-generate-contents.git/issues"
   },
   "keywords": [
     "gulp",

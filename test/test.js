@@ -12,14 +12,14 @@ var assert = require('stream-assert'),
     PassThrough = require('stream').PassThrough,
     config = require('../_config/project.json'),
     creds = require('../_config/creds'),
-    sgc = require('../index');
+    gsgc = require('../index');
 
 
-describe('sass-generate-contents', function() {
+describe('gulp-sass-generate-contents', function() {
     
     it('should emit error on streamed file', function (done) {
         gulp.src([config.src + '/' + config.dirs.styles + '/**/*.scss', config.dirs.components + '/**/*.scss'], { buffer: false })
-        .pipe(sgc(config.src + '/' + config.dirs.styles + '/_main.scss', creds))
+        .pipe(gsgc(config.src + '/' + config.dirs.styles + '/_main.scss', creds))
         .on('error', function (err) {
           err.message.should.eql('Streaming not supported');
           done();
@@ -28,7 +28,7 @@ describe('sass-generate-contents', function() {
 
     it('should ignore null files', function (done) {
         gulp.src([config.src + '/' + config.dirs.styles + '/phantom-file.scss'])
-        .pipe(sgc(config.src + '/' + config.dirs.styles + '/_main.scss', creds))
+        .pipe(gsgc(config.src + '/' + config.dirs.styles + '/_main.scss', creds))
         .pipe(assert.length(0))
         .pipe(assert.end(done))
         .write(new File());
