@@ -15,7 +15,6 @@ The plugin will ignore any files that do not have this on the first line of the 
 ### Install 
 ```
 npm install gulp-sass-generate-contents
-
 ```
 
 ### Example of SASS file to be imported
