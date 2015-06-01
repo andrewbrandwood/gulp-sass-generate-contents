@@ -8,9 +8,7 @@ It's purpose is to create a master SASS file to hold the css @imports of all the
 
 The contents are generated from the first line of each individual SASS file.
 
-<sup>*</sup> The plugin requires a comment at the top of each SASS file formatted starting with // (double slash).
-
-The plugin will ignore any files that do not have this on the first line of the file to be imported.
+<sup>*</sup> The plugin requires a comment at the top of each SASS file formatted starting with // (double slash). The task will ignore files if they don't follow this format.
 
 ### Install 
 ```
