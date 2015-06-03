@@ -1,6 +1,6 @@
 {
   "name": "gulp-sass-generate-contents",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": {
     "name": "Andrew Brandwood",
     "email": "andrew@brandwood.com"
@@ -26,14 +26,14 @@
   },
   "license": "ISC",
   "devDependencies": {
-    "event-stream": "~3.3.0",
-    "gulp-util": "^3.0.4",
-    "through2": "^0.6.5",
     "mocha": "^2.2.5",
     "should": "^6.0.3",
     "stream-assert": "^2.0.2"
   },
   "dependencies": {
+    "event-stream": "~3.3.0",
+    "gulp-util": "^3.0.4",
+    "through2": "^0.6.5",
     "gulp": "^3.8.11",
     "gulp-load-plugins": "^0.10.0"
   }
