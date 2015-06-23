@@ -1,6 +1,6 @@
 {
   "name": "gulp-sass-generate-contents",
-  "version": "0.0.2",
+  "version": "0.1.2",
   "author": {
     "name": "Andrew Brandwood",
     "email": "andrew@brandwood.com"
@@ -21,12 +21,13 @@
   "files": [
     "index.js"
   ],
-  "scripts":{
+  "scripts": {
     "test": "mocha"
   },
   "license": "ISC",
   "devDependencies": {
     "mocha": "^2.2.5",
+    "object-assign": "^3.0.0",
     "should": "^6.0.3",
     "stream-assert": "^2.0.2"
   },

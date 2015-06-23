@@ -15,6 +15,13 @@ The contents are generated from the first line of each individual SASS file.
 npm install gulp-sass-generate-contents
 ```
 
+### Options
+
+forceComments: true //default
+
+set to false to allow files without comments to be included
+
+
 ### Example of SASS file to be imported
 
 ```SASS

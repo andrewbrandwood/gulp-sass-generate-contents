@@ -15,7 +15,7 @@ var fs = require('fs'),
 gulp.task('sass-generate-contents', function(){
 	gulp.src([config.src + '/' + config.dirs.styles + '/**/*.scss', config.dirs.partials + '/**/*.scss'])
 	.pipe(sgc(config.src + '/' + config.dirs.styles + '/_main.scss', creds))
-	.pipe(gulp.dest(config.src + '/' + config.dirs.styles));
+	.pipe(gulp.dest(config.src + '/' + config.dirs.styles))
 });
 
 

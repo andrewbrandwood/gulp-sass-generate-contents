@@ -3,14 +3,19 @@ var path = require('path');
 var gulp = require('gulp');
 var fs = require('fs');
 var gutil = require('gulp-util');
+var objectAssign = require('object-assign');
 var PluginError = gutil.PluginError;
 var File = gutil.File;
 
 // Consts
 const PLUGIN_NAME = 'sass-generate-contents';
 
-function sassGenerateContents(destFilePath, creds){
+function sassGenerateContents(destFilePath, creds, options){
 
+	var defaults = {
+		forceComments: true
+	};
+	var opts = objectAssign(defaults, options);
 	var comments = '';
 	var imports = '';
 	var destFileName = getFileName(destFilePath);
@@ -181,10 +186,16 @@ function sassGenerateContents(destFilePath, creds){
 
 		comments = content.split('\n')[0];
 		var firstChars = comments.charAt(0) + comments.charAt(1);
-		if(String(firstChars) !== '//'){
+		if(String(firstChars) !== '//' && opts.forceComments){
 			throwWarning(fileName);
 			return cb();
 		}
+		if(String(firstChars) !== '//' && !opts.forceComments){
+			comments = '* ';
+		}
+
+
+
 		comments = comments.replace('//', '* ');
 
 		relPath = getRelPath(relPath, destFilePath);
