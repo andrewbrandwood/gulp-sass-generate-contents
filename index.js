@@ -121,7 +121,7 @@ function sassGenerateContents(destFilePath, creds, options){
 	}
 
 	function getFileName(filePath){
-		return filePath.substring(filePath.length, replacePath(filePath).lastIndexOf(':')+1);
+		return path.join(__dirname, filePath.substring(filePath.length, replacePath(filePath).lastIndexOf(':')+1));
 	}
 
 	function createFile(destFilePath){
