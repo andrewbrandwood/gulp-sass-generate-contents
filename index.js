@@ -50,22 +50,22 @@ function sassGenerateContents(destFilePath, creds, options){
 	}
 
 	function createCreds(credsObj){
-		
+
 		var credStr = ['/* ============================================================ *\\\n'];
 		credStr.push('  #MAIN\n')
 		var count = 0;
 		var credLongest = getLongest(credsObj);
-		
+
 
 		for (var cred in credsObj){
 			if (credsObj.hasOwnProperty(cred)) {
-		       
+
 		       var val = credsObj[cred];
 		       var credLength = cred.length;
 		       var diff = credLongest - credLength;
 		       var spacer = getSpacer(diff, ' ');
 		       credStr.push('  ' + cred + ': ' + spacer + '' + val);
-		       
+
 		    }
 		}
 		credStr.push('\n/* ============================================================ *\\\n\n');
@@ -96,7 +96,7 @@ function sassGenerateContents(destFilePath, creds, options){
 		}
 
 
-		
+
 		// build site credentials iff passed in
 		var credsArr = createCreds(creds);
 
@@ -139,22 +139,6 @@ function sassGenerateContents(destFilePath, creds, options){
 		return filePath.substring(0, replacePath(filePath).lastIndexOf(':'));
 	}
 
-	function relPath(str){
-		if(replacePath(str.charAt(0)) !== ':'){
-			return '/' + str;
-		}
-		return str;
-	}
-
-	function getRelPath(p, dest){
-		
-		var p = relPath(p),
-			d = getBase(relPath(dest));
-		p = path.relative(d, p);
-
-		return p;
-	}
-
 	function throwWarning(fileName){
 		gutil.log(PLUGIN_NAME + ' Comments missing or malformed in file: ' + fileName + ' - File not included\n');
 	}
@@ -163,8 +147,11 @@ function sassGenerateContents(destFilePath, creds, options){
 	/* main function */
 
 	function buildString(file, enc, cb){
+
 		currentFilePath = file.path;
+
 		var fileName = getFileName(currentFilePath);
+
 		//don't read the destination path (if in same folder)
 		if (fileName === destFileName) {
 			cb();
@@ -179,10 +166,9 @@ function sassGenerateContents(destFilePath, creds, options){
 		if (file.isStream()) {
 			cb(new gutil.PluginError(PLUGIN_NAME, 'Streaming not supported'));
 			return;
-		}
+    }
 
-		var content = file.contents.toString('utf8'),
-			relPath = file.path.replace(file.cwd,'');
+		var content = file.contents.toString('utf8');
 
 		comments = content.split('\n')[0];
 		var firstChars = comments.charAt(0) + comments.charAt(1);
@@ -194,13 +180,9 @@ function sassGenerateContents(destFilePath, creds, options){
 			comments = '* ';
 		}
 
-
-
 		comments = comments.replace('//', '* ');
 
-		relPath = getRelPath(relPath, destFilePath);
-
-		imports = '@import "' + relPath + '";';
+		imports = '@import "' + currentFilePath + '";';
 
 		updateFile(newFile, imports, comments);
 
