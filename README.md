@@ -53,6 +53,15 @@ gulp.task('gulp-sass-generate-contents', function () {
 	.pipe(gulp.dest('css'));
 });
 
+// With options
+
+gulp.task('gulp-sass-generate-contents', function () {
+	gulp.src(['sass/**/*.scss','partials/**/*.scss'])
+	.pipe(gsgc('css/main.scss', creds, {forceComments: false }))
+	.pipe(gulp.dest('css'));
+});
+
+
 ```
 ### Example of Output
 Based on Harry Roberts' @csswizardry ITCSS - 
