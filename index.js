@@ -116,9 +116,10 @@ function sassGenerateContents(destFilePath, creds, options){
 		return path.split('/').join(':').split('\\').join(':');
 	}
 
-	function getSection(path){
+	function getSection(filePath){
+		var fileDirArray = path.parse(filePath).dir.split(path.sep);
 
-		return replacePath(path).split(':').reverse()[1];
+		return fileDirArray[fileDirArray.length - 1];
 	}
 
 	function getFileName(filePath) {
