@@ -33,6 +33,7 @@ function sassGenerateContents(destFilePath, creds, options){
 		for(var i = 0; i < len; i++){
 			spaceArr.push(spacer);
 		}
+
 		return spaceArr.join('');
 	}
 
@@ -133,10 +134,6 @@ function sassGenerateContents(destFilePath, creds, options){
 		});
 
 		return newFile;
-	}
-
-	function getBase(filePath){
-		return filePath.substring(0, replacePath(filePath).lastIndexOf(':'));
 	}
 
 	function throwWarning(fileName){
