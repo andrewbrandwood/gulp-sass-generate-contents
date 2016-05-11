@@ -40,11 +40,11 @@ function sassGenerateContents(destFilePath, creds, options){
 		var longest = 0;
 		for (var prop in propList){
 			if (propList.hasOwnProperty(prop)) {
-		    	var propLength = prop.length
-		    	if(propLength > longest) {
-		    		longest = propLength;
-		    	}
-		    }
+				var propLength = prop.length
+				if(propLength > longest) {
+					longest = propLength;
+				}
+			}
 		}
 		return longest;
 	}
@@ -60,13 +60,13 @@ function sassGenerateContents(destFilePath, creds, options){
 		for (var cred in credsObj){
 			if (credsObj.hasOwnProperty(cred)) {
 
-		       var val = credsObj[cred];
-		       var credLength = cred.length;
-		       var diff = credLongest - credLength;
-		       var spacer = getSpacer(diff, ' ');
-		       credStr.push('  ' + cred + ': ' + spacer + '' + val);
+				var val = credsObj[cred];
+				var credLength = cred.length;
+				var diff = credLongest - credLength;
+				var spacer = getSpacer(diff, ' ');
+				credStr.push('  ' + cred + ': ' + spacer + '' + val);
 
-		    }
+			}
 		}
 		credStr.push('\n/* ============================================================ *\\\n\n');
 
@@ -166,7 +166,7 @@ function sassGenerateContents(destFilePath, creds, options){
 		if (file.isStream()) {
 			cb(new gutil.PluginError(PLUGIN_NAME, 'Streaming not supported'));
 			return;
-    }
+		}
 
 		var content = file.contents.toString('utf8');
 
@@ -176,6 +176,7 @@ function sassGenerateContents(destFilePath, creds, options){
 			throwWarning(fileName);
 			return cb();
 		}
+
 		if(String(firstChars) !== '//' && !opts.forceComments){
 			comments = '* ';
 		}
