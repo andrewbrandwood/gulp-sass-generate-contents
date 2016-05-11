@@ -111,11 +111,6 @@ function sassGenerateContents(destFilePath, creds, options){
 		return;
 	}
 
-	function replacePath(path){
-		//hack for windows and mac filepath
-		return path.split('/').join(':').split('\\').join(':');
-	}
-
 	function getSection(filePath){
 		var fileDirArray = path.parse(filePath).dir.split(path.sep);
 
