@@ -33,6 +33,7 @@ function sassGenerateContents(destFilePath, creds, options){
 		for(var i = 0; i < len; i++){
 			spaceArr.push(spacer);
 		}
+
 		return spaceArr.join('');
 	}
 
@@ -40,11 +41,11 @@ function sassGenerateContents(destFilePath, creds, options){
 		var longest = 0;
 		for (var prop in propList){
 			if (propList.hasOwnProperty(prop)) {
-		    	var propLength = prop.length
-		    	if(propLength > longest) {
-		    		longest = propLength;
-		    	}
-		    }
+				var propLength = prop.length
+				if(propLength > longest) {
+					longest = propLength;
+				}
+			}
 		}
 		return longest;
 	}
@@ -60,13 +61,13 @@ function sassGenerateContents(destFilePath, creds, options){
 		for (var cred in credsObj){
 			if (credsObj.hasOwnProperty(cred)) {
 
-		       var val = credsObj[cred];
-		       var credLength = cred.length;
-		       var diff = credLongest - credLength;
-		       var spacer = getSpacer(diff, ' ');
-		       credStr.push('  ' + cred + ': ' + spacer + '' + val);
+				var val = credsObj[cred];
+				var credLength = cred.length;
+				var diff = credLongest - credLength;
+				var spacer = getSpacer(diff, ' ');
+				credStr.push('  ' + cred + ': ' + spacer + '' + val);
 
-		    }
+			}
 		}
 		credStr.push('\n/* ============================================================ *\\\n\n');
 
@@ -110,18 +111,14 @@ function sassGenerateContents(destFilePath, creds, options){
 		return;
 	}
 
-	function replacePath(path){
-		//hack for windows and mac filepath
-		return path.split('/').join(':').split('\\').join(':');
+	function getSection(filePath){
+		var fileDirArray = path.parse(filePath).dir.split(path.sep);
+
+		return fileDirArray[fileDirArray.length - 1];
 	}
 
-	function getSection(path){
-
-		return replacePath(path).split(':').reverse()[1];
-	}
-
-	function getFileName(filePath){
-		return filePath.substring(filePath.length, replacePath(filePath).lastIndexOf(':')+1);
+	function getFileName(filePath) {
+		return path.basename(filePath);
 	}
 
 	function createFile(destFilePath){
@@ -133,10 +130,6 @@ function sassGenerateContents(destFilePath, creds, options){
 		});
 
 		return newFile;
-	}
-
-	function getBase(filePath){
-		return filePath.substring(0, replacePath(filePath).lastIndexOf(':'));
 	}
 
 	function throwWarning(fileName){
@@ -166,7 +159,7 @@ function sassGenerateContents(destFilePath, creds, options){
 		if (file.isStream()) {
 			cb(new gutil.PluginError(PLUGIN_NAME, 'Streaming not supported'));
 			return;
-    }
+		}
 
 		var content = file.contents.toString('utf8');
 
@@ -176,6 +169,7 @@ function sassGenerateContents(destFilePath, creds, options){
 			throwWarning(fileName);
 			return cb();
 		}
+
 		if(String(firstChars) !== '//' && !opts.forceComments){
 			comments = '* ';
 		}
