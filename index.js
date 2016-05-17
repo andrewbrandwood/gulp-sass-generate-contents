@@ -96,8 +96,6 @@ function sassGenerateContents(destFilePath, creds, options){
 			commentsArr.push(comments);
 		}
 
-
-
 		// build site credentials iff passed in
 		var credsArr = createCreds(creds);
 
@@ -134,6 +132,12 @@ function sassGenerateContents(destFilePath, creds, options){
 
 	function throwWarning(fileName){
 		gutil.log(PLUGIN_NAME + ' Comments missing or malformed in file: ' + fileName + ' - File not included\n');
+	}
+
+	function generateImportString(filePath) {
+		var pathArray = path.normalize(filePath).split(path.sep);
+
+		return '@import "' + pathArray.join('/') + '";';
 	}
 
 
@@ -176,7 +180,7 @@ function sassGenerateContents(destFilePath, creds, options){
 
 		comments = comments.replace('//', '* ');
 
-		imports = '@import "' + currentFilePath + '";';
+		imports = generateImportString(currentFilePath);
 
 		updateFile(newFile, imports, comments);
 
