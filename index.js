@@ -13,7 +13,8 @@ const PLUGIN_NAME = 'sass-generate-contents';
 function sassGenerateContents(destFilePath, creds, options){
 
 	var defaults = {
-		forceComments: true
+		forceComments: true,
+		disableContents: false
 	};
 	var opts = objectAssign(defaults, options);
 	var comments = '';
@@ -102,7 +103,12 @@ function sassGenerateContents(destFilePath, creds, options){
 		//Hack - quick array splitter
 		var startArr = ['/**\n* CONTENTS'];
 		var splitterArr = ['*\n*/\n\n\n\n'];
-		var newContents = credsArr.concat(startArr, commentsArr, splitterArr, importArr).join('\n');
+		var newContents;
+		if(disableContents) {
+			newContents = credsArr.concat(splitterArr, importArr).join('\n');
+		} else {
+			newContents = credsArr.concat(startArr, commentsArr, splitterArr, importArr).join('\n');
+		}
 
 		newFile.contents = new Buffer(newContents);
 
