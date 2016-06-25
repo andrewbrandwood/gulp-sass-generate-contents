@@ -104,7 +104,7 @@ function sassGenerateContents(destFilePath, creds, options){
 		var startArr = ['/**\n* CONTENTS'];
 		var splitterArr = ['*\n*/\n\n\n\n'];
 		var newContents;
-		if(disableContents) {
+		if(opts.disableContents) {
 			newContents = credsArr.concat(splitterArr, importArr).join('\n');
 		} else {
 			newContents = credsArr.concat(startArr, commentsArr, splitterArr, importArr).join('\n');
