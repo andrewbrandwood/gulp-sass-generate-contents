@@ -27,3 +27,5 @@ build/Release
 node_modules
 
 **/*/_main.scss
+**/*/_no-contents-table.scss
+**/*/_has-contents-table.scss

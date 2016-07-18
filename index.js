@@ -14,7 +14,7 @@ function sassGenerateContents(destFilePath, creds, options){
 
 	var defaults = {
 		forceComments: true,
-		disableContents: false
+		contentsTable: true
 	};
 	var opts = objectAssign(defaults, options);
 	var comments = '';
@@ -53,6 +53,10 @@ function sassGenerateContents(destFilePath, creds, options){
 
 	function createCreds(credsObj){
 
+		if(!credsObj) {
+			return;
+		}
+
 		var credStr = ['/* ============================================================ *\\\n'];
 		credStr.push('  #MAIN\n')
 		var count = 0;
@@ -70,7 +74,7 @@ function sassGenerateContents(destFilePath, creds, options){
 
 			}
 		}
-		credStr.push('\n/* ============================================================ *\\\n\n');
+		credStr.push('\n/* ============================================================ */\n');
 
 		return credStr;
 	}
@@ -104,10 +108,10 @@ function sassGenerateContents(destFilePath, creds, options){
 		var startArr = ['/**\n* CONTENTS'];
 		var splitterArr = ['*\n*/\n\n\n\n'];
 		var newContents;
-		if(opts.disableContents) {
-			newContents = credsArr.concat(splitterArr, importArr).join('\n');
-		} else {
+		if(opts.contentsTable) {
 			newContents = credsArr.concat(startArr, commentsArr, splitterArr, importArr).join('\n');
+		} else {
+			newContents = credsArr.concat(importArr).join('\n');
 		}
 
 		newFile.contents = new Buffer(newContents);
