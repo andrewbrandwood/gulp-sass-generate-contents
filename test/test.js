@@ -46,6 +46,7 @@ describe('gulp-sass-generate-contents', function() {
             var hasFile = 0,
             fs = require('fs');
             fs.readFile(generatedFile, 'utf8', function (err,data) {
+
                 if (err) {
                     return console.log(err);
                 }
@@ -58,9 +59,70 @@ describe('gulp-sass-generate-contents', function() {
                 done();
                 
             });
+        });
+    });
 
-            
+    it('should output table of contents comment block', function (done) {
 
+        var testText = '* CONTENTS';
+        var testFiles = [
+            config.src + '/' + config.dirs.styles + '/components/_test.scss',
+            config.src + '/' + config.dirs.styles + '/components/_test2.scss'
+        ];
+        var generatedFile = config.src + '/' + config.dirs.styles + '/_has-contents-table.scss';
+
+        gulp.src(testFiles)
+        .pipe(gsgc(generatedFile, creds, { contentsTable: true }))
+        .pipe(gulp.dest(config.src + '/' + config.dirs.styles))
+        .on('end', function(callback){
+            var hasTestText = 0,
+                fs = require('fs');
+            fs.readFile(generatedFile, 'utf8', function (err,data) {
+
+                if (err) {
+                    return console.log(err);
+                }
+
+                if(data.indexOf(testText) > 0){
+                    hasTestText = 1;
+                }
+
+                hasTestText.should.be.exactly(1);
+                done();
+                
+            });
+        });
+    });
+
+    it('should not output table of contents comment block', function (done) {
+
+        var testText = '* CONTENTS';
+        var testFiles = [
+            config.src + '/' + config.dirs.styles + '/components/_test.scss',
+            config.src + '/' + config.dirs.styles + '/components/_test2.scss'
+        ];
+        var generatedFile = config.src + '/' + config.dirs.styles + '/_no-contents-table.scss';
+
+        gulp.src(testFiles)
+        .pipe(gsgc(generatedFile, creds, { contentsTable: false }))
+        .pipe(gulp.dest(config.src + '/' + config.dirs.styles))
+        .on('end', function(callback){
+            var hasTestText = 0,
+                fs = require('fs');
+            fs.readFile(generatedFile, 'utf8', function (err,data) {
+
+                if (err) {
+                    return console.log(err);
+                }
+
+                if(data.indexOf(testText) < 0){
+                    hasTestText = 1;
+                }
+
+                hasTestText.should.be.exactly(1);
+                done();
+                
+            });
         });
     });
 

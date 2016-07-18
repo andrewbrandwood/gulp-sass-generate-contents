@@ -13,7 +13,8 @@ const PLUGIN_NAME = 'sass-generate-contents';
 function sassGenerateContents(destFilePath, creds, options){
 
 	var defaults = {
-		forceComments: true
+		forceComments: true,
+		contentsTable: true
 	};
 	var opts = objectAssign(defaults, options);
 	var comments = '';
@@ -52,6 +53,10 @@ function sassGenerateContents(destFilePath, creds, options){
 
 	function createCreds(credsObj){
 
+		if(!credsObj) {
+			return;
+		}
+
 		var credStr = ['/* ============================================================ *\\\n'];
 		credStr.push('  #MAIN\n')
 		var count = 0;
@@ -69,7 +74,7 @@ function sassGenerateContents(destFilePath, creds, options){
 
 			}
 		}
-		credStr.push('\n/* ============================================================ *\\\n\n');
+		credStr.push('\n/* ============================================================ */\n');
 
 		return credStr;
 	}
@@ -102,7 +107,12 @@ function sassGenerateContents(destFilePath, creds, options){
 		//Hack - quick array splitter
 		var startArr = ['/**\n* CONTENTS'];
 		var splitterArr = ['*\n*/\n\n\n\n'];
-		var newContents = credsArr.concat(startArr, commentsArr, splitterArr, importArr).join('\n');
+		var newContents;
+		if(opts.contentsTable) {
+			newContents = credsArr.concat(startArr, commentsArr, splitterArr, importArr).join('\n');
+		} else {
+			newContents = credsArr.concat(importArr).join('\n');
+		}
 
 		newFile.contents = new Buffer(newContents);
 
