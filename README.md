@@ -17,9 +17,17 @@ npm install gulp-sass-generate-contents
 
 ### Options
 
-forceComments: true //default
+#### options.forceComments
+Type: `Boolean`
+Default value: `true`
 
-set to false to allow files without comments to be included
+Set to `false` to allow files without comments to be included
+
+#### options.contentsTable
+Type: `Boolean`
+Default value: `true`
+
+Set to `false` to disable the contents table comment block in the output CSS
 
 
 ### Example of SASS file to be imported
