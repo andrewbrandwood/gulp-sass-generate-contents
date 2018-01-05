@@ -1,6 +1,14 @@
 language: node_js
 node_js:
+  - "9"
+  - "8"
+  - "6"
   - "5"
-  - "4.4"
+  - "4"
   - "0.12"
 sudo: false
+cache:
+  directories:
+    — node_modules
+git:
+  depth: 1
