@@ -107,4 +107,28 @@ describe('gulp-sass-generate-contents', function() {
             .pipe(assert.end(done));
     });
 
+    it('should not output file extensions', function (done) {
+        gulpTestRunner({
+            src: '/components/_test.scss',
+            dest: '/_no-extensions.scss',
+            settings: { excludeExtension: true },
+            assertion: function (fileContent) {
+                fileContent.should.not.match(/@import "((?:\/|\\)[\w\W]+).scss";/gi);
+            }
+        })
+            .pipe(assert.end(done));
+    });
+
+    it('should output file extensions', function (done) {
+        gulpTestRunner({
+            src: '/components/_test.scss',
+            dest: '/_has-extensions.scss',
+            settings: { excludeExtension: false },
+            assertion: function (fileContent) {
+                fileContent.should.match(/@import "((?:\/|\\)[\w\W]+).scss";/gi);
+            }
+        })
+            .pipe(assert.end(done));
+    });
+
 });
