@@ -12,13 +12,45 @@ var assert = require('stream-assert'),
     PassThrough = require('stream').PassThrough,
     config = require('../_config/project.json'),
     creds = require('../_config/creds'),
-    gsgc = require('../index');
+    gsgc = require('../index'),
+    readFiles = require('read-vinyl-file-stream');
 
+should.Assertion.add('containWithin', function (matchString) {
+    this.params = { operator: 'to contain', expected: matchString};
+
+    should(this.obj.indexOf(matchString)).be.above(0);
+});
+
+function prepTestSrc(paths) {
+    paths = Array.isArray(paths) ? paths : [paths];
+
+    return paths.map(function (currentPath) {
+        return getStylePath(currentPath);
+    })
+}
+
+function gulpTestRunner(runconfig) {
+    runconfig.dest = getStylePath(runconfig.dest);
+    runconfig.src = prepTestSrc(runconfig.src);
+
+    return gulp.src(runconfig.src)
+        .pipe(gsgc(runconfig.dest, creds, runconfig.settings))
+        // Uncomment if you need to generate the files to debug
+        // .pipe(gulp.dest(config.src + '/' + config.dirs.styles))
+        .pipe(readFiles(function (content, file, stream, cb) {
+            runconfig.assertion(content);
+            cb(null, content);
+        }));
+}
+
+function getStylePath(filename) {
+    return config.src + '/' + config.dirs.styles + filename;
+}
 
 describe('gulp-sass-generate-contents', function() {
     it('should emit error on streamed file', function (done) {
-        gulp.src([config.src + '/' + config.dirs.styles + '/**/*.scss', config.dirs.components + '/**/*.scss'], { buffer: false })
-        .pipe(gsgc(config.src + '/' + config.dirs.styles + '/_main.scss', creds))
+        gulp.src([getStylePath('/**/*.scss'), config.dirs.components + '/**/*.scss'], { buffer: false })
+        .pipe(gsgc(getStylePath('/_main.scss'), creds))
         .on('error', function (err) {
           err.message.should.eql('Streaming not supported');
           done();
@@ -26,58 +58,54 @@ describe('gulp-sass-generate-contents', function() {
     });
 
     it('should ignore null files', function (done) {
-        gulp.src([config.src + '/' + config.dirs.styles + '/phantom-file.scss'])
-        .pipe(gsgc(config.src + '/' + config.dirs.styles + '/_main.scss', creds))
+        gulp.src([getStylePath('/phantom-file.scss')])
+        .pipe(gsgc(getStylePath('/_main.scss'), creds))
         .pipe(assert.length(0))
         .pipe(assert.end(done))
         .write(new File());
     });
 
-    it('should allow a file with no comments', function(done){
-
-        var testText = 'no-comments-file.scss';
-        var testFile = config.src + '/' + config.dirs.styles + '/**/*.scss';
-        var generatedFile = config.src + '/' + config.dirs.styles + '/_main.scss';
-
-        gulp.src([testFile])
-        .pipe(gsgc(generatedFile, creds, { forceComments: false }))
-        .pipe(gulp.dest(config.src + '/' + config.dirs.styles))
-        .on('end', function(callback){
-            var hasFile = 0,
-            fs = require('fs');
-            fs.readFile(generatedFile, 'utf8', function (err,data) {
-
-                if (err) {
-                    return console.log(err);
+    it('should allow a file with no comments', function(done) {
+        gulpTestRunner({
+            src: '/**/*.scss',
+            dest: '/_allow-blank-comments.scss',
+            settings: { forceComments: false },
+            assertion: function (fileContent) {
+                fileContent.should.containWithin('no-comments-file.scss');
                 }
-
-                if(data.indexOf(testText) > 0){
-                    hasFile = 1;
-                }
-
-                hasFile.should.be.exactly(1);
-                done();
-                
-            });
-        });
+        })
+            .pipe(assert.end(done));
     });
 
     it('should output table of contents comment block', function (done) {
+        gulpTestRunner({
+            src: [
+                '/components/_test.scss',
+                '/components/_test2.scss'
+            ],
+            dest: '/_has-contents-table.scss',
+            settings: { contentsTable: true },
+            assertion: function (fileContent) {
+                fileContent.should.containWithin('* CONTENTS');
+            }
+        })
+            .pipe(assert.end(done));
+            });
 
-        var testText = '* CONTENTS';
-        var testFiles = [
-            config.src + '/' + config.dirs.styles + '/components/_test.scss',
-            config.src + '/' + config.dirs.styles + '/components/_test2.scss'
-        ];
-        var generatedFile = config.src + '/' + config.dirs.styles + '/_has-contents-table.scss';
-
-        gulp.src(testFiles)
-        .pipe(gsgc(generatedFile, creds, { contentsTable: true }))
-        .pipe(gulp.dest(config.src + '/' + config.dirs.styles))
-        .on('end', function(callback){
-            var hasTestText = 0,
-                fs = require('fs');
-            fs.readFile(generatedFile, 'utf8', function (err,data) {
+    it('should not output table of contents comment block', function (done) {
+        gulpTestRunner({
+            src: [
+                '/components/_test.scss',
+                '/components/_test2.scss'
+            ],
+            dest: '/_no-contents-table.scss',
+            settings: { contentsTable: false },
+            assertion: function (fileContent) {
+                fileContent.should.not.containWithin('* CONTENTS');
+            }
+        })
+            .pipe(assert.end(done));
+    });
 
                 if (err) {
                     return console.log(err);

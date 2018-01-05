@@ -31,6 +31,7 @@
   "license": "ISC",
   "devDependencies": {
     "mocha": "^2.2.5",
+    "read-vinyl-file-stream": "^2.0.3",
     "should": "^6.0.3",
     "stream-assert": "^2.0.2"
   },
