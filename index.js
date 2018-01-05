@@ -10,6 +10,18 @@ var File = gutil.File;
 // Consts
 const PLUGIN_NAME = 'sass-generate-contents';
 
+function shouldIncludeImport(existingImports, newImport) {
+	return existingImports.indexOf(newImport) < 0;
+}
+
+function addSectionIfNeeded(currentSection, comments) {
+	var section = getSection(currentFilePath);
+	if (section !== currentSection) {
+		currentSection = section;
+		commentsArr.push('* \n* ' + currentSection.toUpperCase());
+	}
+}
+
 function sassGenerateContents(destFilePath, creds, options){
 
 	var defaults = {
@@ -79,7 +91,7 @@ function sassGenerateContents(destFilePath, creds, options){
 	}
 
 	function addSection(currentFilePath) {
-		let section = getSection(currentFilePath);
+		var section = getSection(currentFilePath);
 		if (section !== currentSection) {
 			currentSection = section;
 			commentsArr.push('* \n* ' + currentSection.toUpperCase());
