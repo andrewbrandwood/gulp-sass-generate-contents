@@ -26,7 +26,8 @@ function sassGenerateContents(destFilePath, creds, options){
 
 	var defaults = {
 		forceComments: true,
-		contentsTable: true
+		contentsTable: true,
+		excludeExtension: false
 	};
 	var opts = objectAssign(defaults, options);
 	var comments = '';
@@ -154,6 +155,11 @@ function sassGenerateContents(destFilePath, creds, options){
 	}
 
 	function generateImportString(filePath) {
+		if (opts.excludeExtension) {
+			var pathObject = path.parse(filePath);
+			filePath = path.join(pathObject.dir, pathObject.name);
+		}
+
 		var pathArray = path.normalize(filePath).split(path.sep);
 
 		return '@import "' + pathArray.join('/') + '";';

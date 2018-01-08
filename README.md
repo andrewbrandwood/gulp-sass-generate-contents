@@ -1,6 +1,6 @@
 
 # gulp-sass-generate-contents <a href="https://travis-ci.org/andrewbrandwood/gulp-sass-generate-contents"><img align="right" src="https://travis-ci.org/andrewbrandwood/gulp-sass-generate-contents.svg?branch=master" alt="Build status" /></a>
-Gulp plugin to generate an imports file with a  table of contents 
+Gulp plugin to generate an imports file with a  table of contents
 
 This plugin was written to help with large scale website builds that use a CSS preprocessor and Gulp as a task runner.
 
@@ -10,7 +10,7 @@ The contents are generated from the first line of each individual SASS file.
 
 <sup>*</sup> The plugin requires a comment at the top of each SASS file formatted starting with // (double slash). The task will ignore files if they don't follow this format.
 
-### Install 
+### Install
 ```
 npm install gulp-sass-generate-contents
 ```
@@ -29,6 +29,12 @@ Default value: `true`
 
 Set to `false` to disable the contents table comment block in the output CSS
 
+#### options.excludeExtension
+Type: `Boolean`
+Default value: `false`
+
+Set to `true` to exclude file extensions from the generated file
+
 
 ### Example of SASS file to be imported
 
@@ -45,7 +51,7 @@ Set to `false` to disable the contents table comment block in the output CSS
 
 ```javascript
 
-// Settings 
+// Settings
 var gsgc = require('gulp-sass-generate-contents');
 var creds = {
 	"Author": 	"Andrew Brandwood",
@@ -72,12 +78,12 @@ gulp.task('gulp-sass-generate-contents', function () {
 
 ```
 ### Example of Output
-Based on Harry Roberts' @csswizardry ITCSS - 
+Based on Harry Roberts' @csswizardry ITCSS -
 [Link to Harry explaining the concept to creative block](http://www.creativebloq.com/web-design/manage-large-scale-web-projects-new-css-architecture-itcss-41514731)
 
 ```
 /*------------------------------------*\
-    
+
     #MAIN
     Site:   www.brandwood.com
     Author: Andrew Brandwood
