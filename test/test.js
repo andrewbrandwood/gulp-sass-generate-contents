@@ -58,11 +58,10 @@ describe('gulp-sass-generate-contents', function() {
     });
 
     it('should ignore null files', function (done) {
-        gulp.src([getStylePath('/phantom-file.scss')])
+        gulp.src([getStylePath('/phantom-file.scss')], { allowEmpty: true })
         .pipe(gsgc(getStylePath('/_main.scss'), creds))
         .pipe(assert.length(0))
         .pipe(assert.end(done))
-        .write(new File());
     });
 
     it('should allow a file with no comments', function(done) {
