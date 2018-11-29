@@ -3,13 +3,8 @@
 'use strict';
 
 var assert = require('stream-assert'),
-    es = require('event-stream'),
     should = require('should'),
-
     gulp = require('gulp'),
-    gutil = require('gulp-util'),
-    File = gutil.File,
-    PassThrough = require('stream').PassThrough,
     config = require('../_config/project.json'),
     creds = require('../_config/creds'),
     gsgc = require('../index'),
