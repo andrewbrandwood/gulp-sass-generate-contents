@@ -134,7 +134,7 @@ function sassGenerateContents(destFilePath, creds, options){
 			cwd: '',
 			base: '',
 			path: destFileName,
-			contents: new Buffer(fileContent)
+			contents: Buffer.from(fileContent)
 		});
 	}
 
