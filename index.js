@@ -1,25 +1,13 @@
 var through = require('through2');
 var path = require('path');
-var gulp = require('gulp');
-var fs = require('fs');
 var gutil = require('gulp-util');
 var objectAssign = require('object-assign');
-var PluginError = gutil.PluginError;
-var File = gutil.File;
 
 // Consts
 const PLUGIN_NAME = 'sass-generate-contents';
 
 function shouldIncludeImport(existingImports, newImport) {
 	return existingImports.indexOf(newImport) < 0;
-}
-
-function addSectionIfNeeded(currentSection, comments) {
-	var section = getSection(currentFilePath);
-	if (section !== currentSection) {
-		currentSection = section;
-		commentsArr.push('* \n* ' + currentSection.toUpperCase());
-	}
 }
 
 function sassGenerateContents(destFilePath, creds, options){
@@ -146,7 +134,7 @@ function sassGenerateContents(destFilePath, creds, options){
 			cwd: '',
 			base: '',
 			path: destFileName,
-			contents: new Buffer(fileContent)
+			contents: Buffer.from(fileContent)
 		});
 	}
 

@@ -5,10 +5,12 @@
     "name": "Andrew Brandwood",
     "email": "andrew@brandwood.com"
   },
-  "contributors": [{
-    "name": "Paul Welsh",
-    "email": "hello@paulwelsh.info"
-  }],
+  "contributors": [
+    {
+      "name": "Paul Welsh",
+      "email": "hello@paulwelsh.info"
+    }
+  ],
   "description": "creates a file with all sass imports neccessary to build single website css file. It also creates a contents type directory based on the first comments line of each imported sass file",
   "main": "index.js",
   "repository": {
@@ -30,17 +32,17 @@
   },
   "license": "ISC",
   "devDependencies": {
-    "mocha": "^2.2.5",
+    "gulp": "^4.0.0",
+    "mocha": "^5.2.0",
     "read-vinyl-file-stream": "^2.0.3",
     "should": "^6.0.3",
-    "stream-assert": "^2.0.2"
+    "stream-assert": "^2.0.2",
+    "gulp-load-plugins": "^1.5.0"
   },
   "dependencies": {
-    "event-stream": "~3.3.0",
     "gulp-util": "^3.0.4",
+    "object-assign": "^3.0.0",
     "through2": "^0.6.5",
-    "gulp": "^3.8.11",
-    "gulp-load-plugins": "^0.10.0",
-    "object-assign": "^3.0.0"
+    "vinyl": "^2.2.0"
   }
 }
