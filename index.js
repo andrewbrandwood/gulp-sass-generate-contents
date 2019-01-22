@@ -6,17 +6,76 @@ var objectAssign = require('object-assign');
 // Consts
 const PLUGIN_NAME = 'sass-generate-contents';
 
+var defaults = {
+	forceComments: true,
+	contentsTable: true,
+	excludeExtension: false
+};
+
 function shouldIncludeImport(existingImports, newImport) {
 	return existingImports.indexOf(newImport) < 0;
 }
 
+function getSpacer(len, spacer, minWidth){
+	var spaceArr = [];
+	var mw = minWidth || 0;
+	var len = len + mw;
+	for(var i = 0; i < len; i++){
+		spaceArr.push(spacer);
+	}
+
+	return spaceArr.join('');
+}
+
+function getLongest(propList){
+	var longest = 0;
+	for (var prop in propList){
+		if (propList.hasOwnProperty(prop)) {
+			var propLength = prop.length
+			if(propLength > longest) {
+				longest = propLength;
+			}
+		}
+	}
+	return longest;
+}
+
+function getSection(filePath){
+	var fileDirArray = path.parse(filePath).dir.split(path.sep);
+
+	return fileDirArray[fileDirArray.length - 1];
+}
+
+function getFileName(filePath) {
+	return path.basename(filePath);
+}
+
+function createFile(destFileName, fileContent){
+	return new gutil.File({
+		cwd: '',
+		base: '',
+		path: destFileName,
+		contents: Buffer.from(fileContent)
+	});
+}
+
+function throwWarning(fileName){
+	gutil.log(PLUGIN_NAME + ' Comments missing or malformed in file: ' + fileName + ' - File not included\n');
+}
+
+function generateImportString(filePath, excludeExtension) {
+	if (excludeExtension) {
+		var pathObject = path.parse(filePath);
+		filePath = path.join(pathObject.dir, pathObject.name);
+	}
+
+	var pathArray = path.normalize(filePath).split(path.sep);
+
+	return '@import "' + pathArray.join('/') + '";';
+}
+
 function sassGenerateContents(destFilePath, creds, options){
 
-	var defaults = {
-		forceComments: true,
-		contentsTable: true,
-		excludeExtension: false
-	};
 	var opts = objectAssign(defaults, options);
 	var imports = '';
 	var destFileName = getFileName(destFilePath);
@@ -26,29 +85,6 @@ function sassGenerateContents(destFilePath, creds, options){
 	var commentsArr = [];
 	var creds = typeof creds === 'object' ? creds : {};
 
-	function getSpacer(len, spacer, minWidth){
-		var spaceArr = [];
-		var mw = minWidth || 0;
-		var len = len + mw;
-		for(var i = 0; i < len; i++){
-			spaceArr.push(spacer);
-		}
-
-		return spaceArr.join('');
-	}
-
-	function getLongest(propList){
-		var longest = 0;
-		for (var prop in propList){
-			if (propList.hasOwnProperty(prop)) {
-				var propLength = prop.length
-				if(propLength > longest) {
-					longest = propLength;
-				}
-			}
-		}
-		return longest;
-	}
 
 	function createCreds(credsObj){
 
@@ -57,8 +93,7 @@ function sassGenerateContents(destFilePath, creds, options){
 		}
 
 		var credStr = ['/* ============================================================ *\\\n'];
-		credStr.push('  #MAIN\n')
-		var count = 0;
+		credStr.push('  #MAIN\n');
 		var credLongest = getLongest(credsObj);
 
 
@@ -118,40 +153,6 @@ function sassGenerateContents(destFilePath, creds, options){
 		return newContents;
 	}
 
-	function getSection(filePath){
-		var fileDirArray = path.parse(filePath).dir.split(path.sep);
-
-		return fileDirArray[fileDirArray.length - 1];
-	}
-
-	function getFileName(filePath) {
-		return path.basename(filePath);
-	}
-
-	function createFile(destFilePath, fileContent){
-		return new gutil.File({
-			cwd: '',
-			base: '',
-			path: destFileName,
-			contents: Buffer.from(fileContent)
-		});
-	}
-
-	function throwWarning(fileName){
-		gutil.log(PLUGIN_NAME + ' Comments missing or malformed in file: ' + fileName + ' - File not included\n');
-	}
-
-	function generateImportString(filePath) {
-		if (opts.excludeExtension) {
-			var pathObject = path.parse(filePath);
-			filePath = path.join(pathObject.dir, pathObject.name);
-		}
-
-		var pathArray = path.normalize(filePath).split(path.sep);
-
-		return '@import "' + pathArray.join('/') + '";';
-	}
-
 
 	/* main function */
 
@@ -192,7 +193,7 @@ function sassGenerateContents(destFilePath, creds, options){
 
 		comments = comments.replace('//', '* ');
 
-		imports = generateImportString(currentFilePath);
+		imports = generateImportString(currentFilePath, opts.excludeExtension);
 
 		addImportToList(imports, comments, currentFilePath);
 
@@ -206,9 +207,9 @@ function sassGenerateContents(destFilePath, creds, options){
 			return;
 		}
 
-		// Create the file bugger to pass on down the stream
+		// Create the file buffer to pass on down the stream
 		this.push(createFile(
-			destFilePath,
+			destFileName,
 			constructOutput(importArr, commentsArr)
 		));
 
