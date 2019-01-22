@@ -27,17 +27,10 @@ function getSpacer(len, spacer, minWidth){
 	return spaceArr.join('');
 }
 
-function getLongest(propList){
-	var longest = 0;
-	for (var prop in propList){
-		if (propList.hasOwnProperty(prop)) {
-			var propLength = prop.length
-			if(propLength > longest) {
-				longest = propLength;
-			}
-		}
-	}
-	return longest;
+function getLongest(propList) {
+	return Object.keys(propList).reduce(function(maxLength, currentProperty) {
+		return maxLength > currentProperty.length ? maxLength : currentProperty.length
+	}, 0);
 }
 
 function getSection(filePath){
