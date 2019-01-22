@@ -16,15 +16,8 @@ function shouldIncludeImport(existingImports, newImport) {
 	return existingImports.indexOf(newImport) < 0;
 }
 
-function getSpacer(len, spacer, minWidth){
-	var spaceArr = [];
-	var mw = minWidth || 0;
-	var len = len + mw;
-	for(var i = 0; i < len; i++){
-		spaceArr.push(spacer);
-	}
-
-	return spaceArr.join('');
+function getSpacer(length, spacer) {
+	return spacer.repeat(length);
 }
 
 function getLongest(propList) {
