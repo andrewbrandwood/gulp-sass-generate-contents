@@ -18,7 +18,6 @@ function sassGenerateContents(destFilePath, creds, options){
 		excludeExtension: false
 	};
 	var opts = objectAssign(defaults, options);
-	var comments = '';
 	var imports = '';
 	var destFileName = getFileName(destFilePath);
 	var currentFilePath = '';
@@ -180,7 +179,7 @@ function sassGenerateContents(destFilePath, creds, options){
 
 		var content = file.contents.toString('utf8');
 
-		comments = content.split('\n')[0];
+		var comments = content.split('\n')[0];
 		var firstChars = comments.charAt(0) + comments.charAt(1);
 		if(String(firstChars) !== '//' && opts.forceComments){
 			throwWarning(fileName);
