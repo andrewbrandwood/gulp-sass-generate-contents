@@ -27,9 +27,7 @@ function getLongest(propList) {
 }
 
 function getSection(filePath){
-	var fileDirArray = path.parse(filePath).dir.split(path.sep);
-
-	return fileDirArray[fileDirArray.length - 1];
+	return path.parse(filePath).dir.split(path.sep).pop();
 }
 
 function getFileName(filePath) {
