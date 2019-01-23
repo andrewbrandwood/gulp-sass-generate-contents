@@ -130,17 +130,22 @@ function sassGenerateContents(destFilePath, creds, options){
 		}
 	}
 
-	function addImportToList(currentFilePath, importString, comment) {
+	function addImportToList(currentFilePath, file, fileName, opts) {
+		var importString = generateImportString(currentFilePath, opts.excludeExtension);
+
 		// Check if this import has already been included
 		if (shouldIncludeImport(importArr, importString)) {
 			//if the import doesn't exist add a new one
 			importArr.push(importString);
 
-			// Add a section to the comments if needed
-			addSection(currentFilePath);
-
-			// Add the comment to the group
-			commentsArr.push(comment);
+			if(opts.contentsTable) {
+				var comment = getFileIntrocomment(file, fileName, opts.forceComments);
+				// Add a section to the comments if needed
+				addSection(currentFilePath);
+	
+				// Add the comment to the group
+				commentsArr.push(comment);
+			}
 		}
 	}
 
@@ -163,10 +168,7 @@ function sassGenerateContents(destFilePath, creds, options){
 			return;
 		}
 
-		var comment = getFileIntrocomment(file, fileName, opts.forceComments);
-		var imports = generateImportString(currentFilePath, opts.excludeExtension);
-
-		addImportToList(currentFilePath, imports, comment);
+		addImportToList(currentFilePath, file, fileName, opts);
 		return cb();
 	};
 
