@@ -77,6 +77,41 @@ function getFileIntrocomment(file, fileName, forceComments) {
 	return comments;
 }
 
+function createCreds(credsObj){
+	if(!credsObj) {
+		return [];
+	}
+
+	var credArray = ['/* ============================================================ *\\\n'];
+	credArray.push('  #MAIN\n');
+	var credLongest = getLongest(credsObj);
+
+	for (var cred in credsObj){
+		if (credsObj.hasOwnProperty(cred)) {
+			var spacer = getSpacer(credLongest - cred.length, ' ');
+			credArray.push(`  ${cred}: ${spacer}${credsObj[cred]}`);
+		}
+	}
+	credArray.push('\n/* ============================================================ */\n');
+
+	return credArray;
+}
+
+function constructOutput(imports, creds, comments, contentsTable){
+	// build site credentials if passed in
+	var credsArr = createCreds(creds);
+
+	// Add the comments to the top of the file if required
+	if(contentsTable) {
+		credsArr.push('/**\n* CONTENTS');
+		credsArr.concat(comments);
+		credsArr.push('*\n*/\n\n\n\n');
+	}
+
+	// Return the generated file string
+	return credsArr.concat(imports).join('\n');
+}
+
 function sassGenerateContents(destFilePath, creds, options){
 
 	var opts = objectAssign(defaults, options);
@@ -87,34 +122,6 @@ function sassGenerateContents(destFilePath, creds, options){
 	var commentsArr = [];
 	var creds = typeof creds === 'object' ? creds : {};
 
-
-	function createCreds(credsObj){
-
-		if(!credsObj) {
-			return;
-		}
-
-		var credStr = ['/* ============================================================ *\\\n'];
-		credStr.push('  #MAIN\n');
-		var credLongest = getLongest(credsObj);
-
-
-		for (var cred in credsObj){
-			if (credsObj.hasOwnProperty(cred)) {
-
-				var val = credsObj[cred];
-				var credLength = cred.length;
-				var diff = credLongest - credLength;
-				var spacer = getSpacer(diff, ' ');
-				credStr.push('  ' + cred + ': ' + spacer + '' + val);
-
-			}
-		}
-		credStr.push('\n/* ============================================================ */\n');
-
-		return credStr;
-	}
-
 	function addSection(currentFilePath) {
 		var section = getSection(currentFilePath);
 		if (section !== currentSection) {
@@ -123,7 +130,7 @@ function sassGenerateContents(destFilePath, creds, options){
 		}
 	}
 
-	function addImportToList(importString, comment, currentFilePath) {
+	function addImportToList(currentFilePath, importString, comment) {
 		// Check if this import has already been included
 		if (shouldIncludeImport(importArr, importString)) {
 			//if the import doesn't exist add a new one
@@ -137,29 +144,10 @@ function sassGenerateContents(destFilePath, creds, options){
 		}
 	}
 
-	function constructOutput(imports, comments){
-
-		// build site credentials iff passed in
-		var credsArr = createCreds(creds);
-
-		//Hack - quick array splitter
-		var startArr = ['/**\n* CONTENTS'];
-		var splitterArr = ['*\n*/\n\n\n\n'];
-		var newContents;
-		if(opts.contentsTable) {
-			newContents = credsArr.concat(startArr, comments, splitterArr, imports).join('\n');
-		} else {
-			newContents = credsArr.concat(imports).join('\n');
-		}
-
-		return newContents;
-	}
-
 
 	/* main function */
 
 	function buildString(file, enc, cb){
-
 		currentFilePath = file.path;
 
 		var fileName = getFileName(currentFilePath);
@@ -178,8 +166,7 @@ function sassGenerateContents(destFilePath, creds, options){
 		var comment = getFileIntrocomment(file, fileName, opts.forceComments);
 		var imports = generateImportString(currentFilePath, opts.excludeExtension);
 
-		addImportToList(imports, comment, currentFilePath);
-
+		addImportToList(currentFilePath, imports, comment);
 		return cb();
 	};
 
@@ -193,7 +180,7 @@ function sassGenerateContents(destFilePath, creds, options){
 		// Create the file buffer to pass on down the stream
 		this.push(createFile(
 			destFileName,
-			constructOutput(importArr, commentsArr)
+			constructOutput(importArr, creds, commentsArr, opts.contentsTable)
 		));
 
 		cb();
