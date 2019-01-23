@@ -58,10 +58,28 @@ function generateImportString(filePath, excludeExtension) {
 	return '@import "' + pathArray.join('/') + '";';
 }
 
+function getFileIntrocomment(file, fileName, forceComments) {
+	var content = file.contents.toString('utf8');
+
+	var comments = content.split('\n')[0];
+	var firstChars = comments.charAt(0) + comments.charAt(1);
+	if(String(firstChars) !== '//' && forceComments){
+		throwWarning(fileName);
+		return cb();
+	}
+
+	if(String(firstChars) !== '//' && !forceComments){
+		comments = '* ';
+	}
+
+	comments = comments.replace('//', '* ');
+
+	return comments;
+}
+
 function sassGenerateContents(destFilePath, creds, options){
 
 	var opts = objectAssign(defaults, options);
-	var imports = '';
 	var destFileName = getFileName(destFilePath);
 	var currentFilePath = '';
 	var currentSection = '';
@@ -147,12 +165,7 @@ function sassGenerateContents(destFilePath, creds, options){
 		var fileName = getFileName(currentFilePath);
 
 		//don't read the destination path (if in same folder)
-		if (fileName === destFileName) {
-			cb();
-			return;
-		}
-
-		if (file.isNull()) {
+		if (fileName === destFileName || file.isNull()) {
 			cb();
 			return;
 		}
@@ -162,24 +175,10 @@ function sassGenerateContents(destFilePath, creds, options){
 			return;
 		}
 
-		var content = file.contents.toString('utf8');
+		var comment = getFileIntrocomment(file, fileName, opts.forceComments);
+		var imports = generateImportString(currentFilePath, opts.excludeExtension);
 
-		var comments = content.split('\n')[0];
-		var firstChars = comments.charAt(0) + comments.charAt(1);
-		if(String(firstChars) !== '//' && opts.forceComments){
-			throwWarning(fileName);
-			return cb();
-		}
-
-		if(String(firstChars) !== '//' && !opts.forceComments){
-			comments = '* ';
-		}
-
-		comments = comments.replace('//', '* ');
-
-		imports = generateImportString(currentFilePath, opts.excludeExtension);
-
-		addImportToList(imports, comments, currentFilePath);
+		addImportToList(imports, comment, currentFilePath);
 
 		return cb();
 	};
