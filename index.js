@@ -2,6 +2,7 @@ var through = require('through2');
 var path = require('path');
 var gutil = require('gulp-util');
 var objectAssign = require('object-assign');
+var log = require('fancy-log');
 
 // Consts
 const PLUGIN_NAME = 'sass-generate-contents';
@@ -43,8 +44,8 @@ function createFile(destFileName, fileContent){
 	});
 }
 
-function throwWarning(fileName){
-	gutil.log(PLUGIN_NAME + ' Comments missing or malformed in file: ' + fileName + ' - File not included\n');
+function throwWarning(fileName) {
+	log.warn(`${PLUGIN_NAME} Comments missing or malformed in file: ${fileName} - File not included`)
 }
 
 function generateImportString(filePath, excludeExtension) {
@@ -58,17 +59,16 @@ function generateImportString(filePath, excludeExtension) {
 	return '@import "' + pathArray.join('/') + '";';
 }
 
-function getFileIntrocomment(file, fileName, forceComments) {
+function getFileIntrocomment(file, forceComments) {
 	var content = file.contents.toString('utf8');
-
 	var comments = content.split('\n')[0];
 	var firstChars = comments.charAt(0) + comments.charAt(1);
-	if(String(firstChars) !== '//' && forceComments){
-		throwWarning(fileName);
-		return cb();
+
+	if(String(firstChars) !== '//' && forceComments) {
+		throw new Error();
 	}
 
-	if(String(firstChars) !== '//' && !forceComments){
+	if(String(firstChars) !== '//' && !forceComments) {
 		comments = '* ';
 	}
 
@@ -113,7 +113,6 @@ function constructOutput(imports, creds, comments, contentsTable){
 }
 
 function sassGenerateContents(destFilePath, creds, options){
-
 	var opts = objectAssign(defaults, options);
 	var destFileName = getFileName(destFilePath);
 	var currentFilePath = '';
@@ -135,16 +134,22 @@ function sassGenerateContents(destFilePath, creds, options){
 
 		// Check if this import has already been included
 		if (shouldIncludeImport(importArr, importString)) {
-			//if the import doesn't exist add a new one
-			importArr.push(importString);
 
-			if(opts.contentsTable) {
-				var comment = getFileIntrocomment(file, fileName, opts.forceComments);
-				// Add a section to the comments if needed
-				addSection(currentFilePath);
-	
-				// Add the comment to the group
-				commentsArr.push(comment);
+			try {
+				if(opts.contentsTable) {
+					var comment = getFileIntrocomment(file, opts.forceComments);
+					// Add a section to the comments if needed
+					addSection(currentFilePath);
+		
+					// Add the comment to the group
+					commentsArr.push(comment);
+				}
+
+				//if the import doesn't exist add a new one
+				importArr.push(importString);
+			} catch (error) {
+				// Comment errored so don't bother adding to the imports and warn about it
+				throwWarning(fileName);
 			}
 		}
 	}
@@ -152,7 +157,7 @@ function sassGenerateContents(destFilePath, creds, options){
 
 	/* main function */
 
-	function buildString(file, enc, cb){
+	function buildString(file, enc, cb) {
 		currentFilePath = file.path;
 
 		var fileName = getFileName(currentFilePath);
