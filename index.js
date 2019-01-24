@@ -1,8 +1,9 @@
 var through = require('through2');
 var path = require('path');
-var gutil = require('gulp-util');
 var objectAssign = require('object-assign');
 var log = require('fancy-log');
+var Vinyl = require('vinyl');
+var PluginError = require('plugin-error');
 
 // Consts
 const PLUGIN_NAME = 'sass-generate-contents';
@@ -36,9 +37,8 @@ function getFileName(filePath) {
 }
 
 function createFile(destFileName, fileContent){
-	return new gutil.File({
+	return new Vinyl({
 		cwd: '',
-		base: '',
 		path: destFileName,
 		contents: Buffer.from(fileContent)
 	});
@@ -169,7 +169,7 @@ function sassGenerateContents(destFilePath, creds, options){
 		}
 
 		if (file.isStream()) {
-			cb(new gutil.PluginError(PLUGIN_NAME, 'Streaming not supported'));
+			cb(new PluginError(PLUGIN_NAME, 'Streaming not supported'));
 			return;
 		}
 
