@@ -1,14 +1,14 @@
-var through = require('through2');
-var path = require('path');
-var objectAssign = require('object-assign');
-var log = require('fancy-log');
-var Vinyl = require('vinyl');
-var PluginError = require('plugin-error');
+const through = require('through2');
+const path = require('path');
+const objectAssign = require('object-assign');
+const log = require('fancy-log');
+const Vinyl = require('vinyl');
+const PluginError = require('plugin-error');
 
 // Consts
 const PLUGIN_NAME = 'sass-generate-contents';
 
-var defaults = {
+const defaults = {
 	forceComments: true,
 	contentsTable: true,
 	excludeExtension: false
@@ -50,19 +50,19 @@ function throwWarning(fileName) {
 
 function generateImportString(filePath, excludeExtension) {
 	if (excludeExtension) {
-		var pathObject = path.parse(filePath);
+		const pathObject = path.parse(filePath);
 		filePath = path.join(pathObject.dir, pathObject.name);
 	}
 
-	var pathArray = path.normalize(filePath).split(path.sep);
+	const pathArray = path.normalize(filePath).split(path.sep);
 
-	return '@import "' + pathArray.join('/') + '";';
+	return `'@import "${pathArray.join('/')}";`;
 }
 
 function getFileIntrocomment(file, forceComments) {
-	var content = file.contents.toString('utf8');
-	var comments = content.split('\n')[0];
-	var firstChars = comments.charAt(0) + comments.charAt(1);
+	const content = file.contents.toString('utf8');
+	let comments = content.split('\n')[0];
+	const firstChars = comments.charAt(0) + comments.charAt(1);
 
 	if(String(firstChars) !== '//' && forceComments) {
 		throw new Error();
@@ -82,13 +82,13 @@ function createCreds(credsObj){
 		return [];
 	}
 
-	var credArray = ['/* ============================================================ *\\\n'];
+	const credArray = ['/* ============================================================ *\\\n'];
 	credArray.push('  #MAIN\n');
-	var credLongest = getLongest(credsObj);
+	const credLongest = getLongest(credsObj);
 
-	for (var cred in credsObj){
+	for (let cred in credsObj){
 		if (credsObj.hasOwnProperty(cred)) {
-			var spacer = getSpacer(credLongest - cred.length, ' ');
+			const spacer = getSpacer(credLongest - cred.length, ' ');
 			credArray.push(`  ${cred}: ${spacer}${credsObj[cred]}`);
 		}
 	}
@@ -99,7 +99,7 @@ function createCreds(credsObj){
 
 function constructOutput(imports, creds, comments, contentsTable){
 	// build site credentials if passed in
-	var credsArr = createCreds(creds);
+	const credsArr = createCreds(creds);
 
 	// Add the comments to the top of the file if required
 	if(contentsTable) {
@@ -112,17 +112,16 @@ function constructOutput(imports, creds, comments, contentsTable){
 	return credsArr.concat(imports).join('\n');
 }
 
-function sassGenerateContents(destFilePath, creds, options){
-	var opts = objectAssign(defaults, options);
-	var destFileName = getFileName(destFilePath);
-	var currentFilePath = '';
-	var currentSection = '';
-	var importArr = [];
-	var commentsArr = [];
-	var creds = typeof creds === 'object' ? creds : {};
+function sassGenerateContents(destFilePath, credsSettings, options){
+	const opts = objectAssign(defaults, options);
+	const destFileName = getFileName(destFilePath);
+	const currentSection = '';
+	const importArr = [];
+	const commentsArr = [];
+	const creds = typeof credsSettings === 'object' ? credsSettings : {};
 
 	function addSection(currentFilePath) {
-		var section = getSection(currentFilePath);
+		const section = getSection(currentFilePath);
 		if (section !== currentSection) {
 			currentSection = section;
 			commentsArr.push('* \n* ' + currentSection.toUpperCase());
@@ -130,14 +129,14 @@ function sassGenerateContents(destFilePath, creds, options){
 	}
 
 	function addImportToList(currentFilePath, file, fileName, opts) {
-		var importString = generateImportString(currentFilePath, opts.excludeExtension);
+		const importString = generateImportString(currentFilePath, opts.excludeExtension);
 
 		// Check if this import has already been included
 		if (shouldIncludeImport(importArr, importString)) {
 
 			try {
 				if(opts.contentsTable) {
-					var comment = getFileIntrocomment(file, opts.forceComments);
+					const comment = getFileIntrocomment(file, opts.forceComments);
 					// Add a section to the comments if needed
 					addSection(currentFilePath);
 		
@@ -158,9 +157,8 @@ function sassGenerateContents(destFilePath, creds, options){
 	/* main function */
 
 	function buildString(file, enc, cb) {
-		currentFilePath = file.path;
-
-		var fileName = getFileName(currentFilePath);
+		const currentFilePath = file.path;
+		const fileName = getFileName(currentFilePath);
 
 		//don't read the destination path (if in same folder)
 		if (fileName === destFileName || file.isNull()) {
