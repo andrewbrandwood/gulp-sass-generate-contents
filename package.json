@@ -37,7 +37,7 @@
     "mocha": "^5.2.0",
     "mockery": "^2.1.0",
     "read-vinyl-file-stream": "^2.0.3",
-    "should": "^6.0.3",
+    "should": "^13.2.3",
     "stream-assert": "^2.0.2"
   },
   "dependencies": {
