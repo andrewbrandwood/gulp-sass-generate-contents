@@ -45,8 +45,8 @@ function getStylePath(filename) {
 
 describe('gulp-sass-generate-contents', function() {
     var gsgc;
-    let logText = '';
-    let logCalled = false;
+    var logText = '';
+    var logCalled = false;
 
     const testLog = {
         warn: function(logString) {
