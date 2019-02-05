@@ -56,7 +56,7 @@ function generateImportString(filePath, excludeExtension) {
 
 	var pathArray = path.normalize(filePath).split(path.sep);
 
-	return `'@import "${pathArray.join('/')}";`;
+	return `@import "${pathArray.join('/')}";`;
 }
 
 function getFileIntrocomment(file, forceComments) {
