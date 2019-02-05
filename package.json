@@ -1,6 +1,6 @@
 {
   "name": "gulp-sass-generate-contents",
-  "version": "0.5.0",
+  "version": "1.0.0",
   "author": {
     "name": "Andrew Brandwood",
     "email": "andrew@brandwood.com"
@@ -9,6 +9,10 @@
     {
       "name": "Paul Welsh",
       "email": "hello@paulwelsh.info"
+    },
+    {
+      "name": "Barney Scott",
+      "email": "barney.scott@codecomputerlove.com"
     }
   ],
   "description": "creates a file with all sass imports neccessary to build single website css file. It also creates a contents type directory based on the first comments line of each imported sass file",
