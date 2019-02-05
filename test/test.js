@@ -2,13 +2,14 @@
 
 'use strict';
 
-var assert = require('stream-assert'),
-    should = require('should'),
-    gulp = require('gulp'),
-    config = require('../_config/project.json'),
-    creds = require('../_config/creds'),
-    gsgc = require('../index'),
-    readFiles = require('read-vinyl-file-stream');
+var assert = require('stream-assert');
+var should = require('should');
+var gulp = require('gulp');
+var config = require('../_config/project.json');
+var creds = require('../_config/creds');
+var readFiles = require('read-vinyl-file-stream');
+var mockery = require('mockery');
+
 
 should.Assertion.add('containWithin', function (matchString) {
     this.params = { operator: 'to contain', expected: matchString};
@@ -24,7 +25,7 @@ function prepTestSrc(paths) {
     })
 }
 
-function gulpTestRunner(runconfig) {
+function gulpTestRunner(runconfig, gsgc) {
     runconfig.dest = getStylePath(runconfig.dest);
     runconfig.src = prepTestSrc(runconfig.src);
 
@@ -43,6 +44,31 @@ function getStylePath(filename) {
 }
 
 describe('gulp-sass-generate-contents', function() {
+    var gsgc;
+    var logText = '';
+    var logCalled = false;
+
+    const testLog = {
+        warn: function(logString) {
+            logCalled = true;
+            logText = logString;
+            return;
+        }
+    };
+
+    before(function() {
+        mockery.enable({
+            warnOnReplace: false,
+            warnOnUnregistered: false
+        });
+        mockery.registerMock('fancy-log', testLog);
+        gsgc = require('../index');
+    })
+
+    after(function() {
+        mockery.disable();
+    });
+
     it('should emit error on streamed file', function (done) {
         gulp.src([getStylePath('/**/*.scss'), config.dirs.components + '/**/*.scss'], { buffer: false })
         .pipe(gsgc(getStylePath('/_main.scss'), creds))
@@ -67,8 +93,23 @@ describe('gulp-sass-generate-contents', function() {
             assertion: function (fileContent) {
                 fileContent.should.containWithin('no-comments-file.scss');
             }
-        })
-            .pipe(assert.end(done));
+        }, gsgc)
+        .pipe(assert.end(done));
+    });
+
+    it('should warn if a file has no comments', function(done) {
+        const testMessage = 'sass-generate-contents Comments missing or malformed in file: no-comments-file.scss - File not included';
+
+        logText = '';
+        logCalled = false;
+
+        gulp.src([getStylePath('/components/*.scss')])
+            .pipe(gsgc(getStylePath('/_require-comments.scss'), creds, { forceComments: true }))
+            .on('end', () => {
+                logCalled.should.be.true;
+                testMessage.should.eql(logText)
+            })
+            .pipe(assert.end(done))
     });
 
     it('should output table of contents comment block', function (done) {
@@ -82,7 +123,7 @@ describe('gulp-sass-generate-contents', function() {
             assertion: function (fileContent) {
                 fileContent.should.containWithin('* CONTENTS');
             }
-        })
+        }, gsgc)
             .pipe(assert.end(done));
     });
 
@@ -97,7 +138,7 @@ describe('gulp-sass-generate-contents', function() {
             assertion: function (fileContent) {
                 fileContent.should.not.containWithin('* CONTENTS');
             }
-        })
+        }, gsgc)
             .pipe(assert.end(done));
     });
 
@@ -109,7 +150,7 @@ describe('gulp-sass-generate-contents', function() {
             assertion: function (fileContent) {
                 fileContent.should.not.match(/@import "((?:\/|\\)[\w\W]+).scss";/gi);
             }
-        })
+        }, gsgc)
             .pipe(assert.end(done));
     });
 
@@ -121,8 +162,7 @@ describe('gulp-sass-generate-contents', function() {
             assertion: function (fileContent) {
                 fileContent.should.match(/@import "((?:\/|\\)[\w\W]+).scss";/gi);
             }
-        })
+        }, gsgc)
             .pipe(assert.end(done));
     });
-
 });
