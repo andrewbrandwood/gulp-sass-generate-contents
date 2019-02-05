@@ -139,7 +139,7 @@ function sassGenerateContents(destFilePath, credsSettings, options){
 					var comment = getFileIntrocomment(file, opts.forceComments);
 					// Add a section to the comments if needed
 					addSection(currentFilePath);
-		
+
 					// Add the comment to the group
 					commentsArr.push(comment);
 				}
